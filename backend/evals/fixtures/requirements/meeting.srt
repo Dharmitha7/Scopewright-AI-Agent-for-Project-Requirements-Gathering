@@ -1,0 +1,16 @@
+1
+00:00:01,000 --> 00:00:06,000
+Priya: Employee identifiers cannot be recycled after termination.
+
+2
+00:00:07,000 --> 00:00:13,000
+Marco: The line manager approves ordinary access requests.
+
+3
+00:00:14,000 --> 00:00:21,000
+Priya: Privileged access also needs Security Operations approval.
+
+4
+00:00:22,000 --> 00:00:29,000
+Marco: We do not require payroll calculation in the first release.
+

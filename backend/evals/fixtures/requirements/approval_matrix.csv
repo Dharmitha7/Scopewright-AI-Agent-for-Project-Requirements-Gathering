@@ -1,0 +1,5 @@
+Access type,Primary approver,Additional approver,Maximum completion time
+Ordinary access,Line manager,None,4 business hours
+Privileged access,Line manager,Security Operations,8 business hours
+Emergency access,Security Operations,Incident commander,30 minutes
+

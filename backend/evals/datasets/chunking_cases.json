@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "description": "CrewLane chunk-containment gold set. Required terms must coexist in at least one chunk.",
+  "cases": [
+    {
+      "source_id": "planning-brief",
+      "path": "fixtures/planning/project_brief.md",
+      "phase": "planning",
+      "facts": [
+        {"fact_id": "PLAN-SCOPE-1", "fact": "Version one excludes payroll calculation.", "required_terms": ["version one", "does not include", "payroll calculation"], "category": "negation"},
+        {"fact_id": "PLAN-SCOPE-2", "fact": "Version one excludes international payments.", "required_terms": ["version one", "does not include", "international payments"], "category": "negation"},
+        {"fact_id": "PLAN-RISK-1", "fact": "Unavailable directory requests remain pending and are retried.", "required_terms": ["directory API", "remain pending", "retry"], "category": "cross-sentence"}
+      ]
+    },
+    {
+      "source_id": "kickoff-notes",
+      "path": "fixtures/planning/kickoff_notes.txt",
+      "phase": "planning",
+      "facts": [
+        {"fact_id": "PLAN-STAKE-1", "fact": "Security Operations approves privileged access.", "required_terms": ["Security Operations", "approve privileged access"], "category": "stakeholder"},
+        {"fact_id": "PLAN-SOURCE-1", "fact": "Human Resources is the source of truth for worker status.", "required_terms": ["Human Resources", "source of truth", "worker status"], "category": "source-of-truth"},
+        {"fact_id": "PLAN-SCOPE-3", "fact": "Payroll calculation is excluded from version one.", "required_terms": ["excluded payroll calculation", "version one"], "category": "alternative-source"}
+      ]
+    },
+    {
+      "source_id": "access-requirements",
+      "path": "fixtures/requirements/access_requirements.txt",
+      "phase": "requirements",
+      "facts": [
+        {"fact_id": "REQ-ID-1", "fact": "Every worker receives a unique workforce identifier.", "required_terms": ["REQ-ACC-001", "unique workforce identifier"], "category": "identifier"},
+        {"fact_id": "REQ-ID-2", "fact": "Workforce identifiers are never reused after departure.", "required_terms": ["REQ-ACC-002", "must never be reused"], "category": "negation"},
+        {"fact_id": "REQ-RETRY-1", "fact": "Directory provisioning retries at most three times before manual review.", "required_terms": ["REQ-ACC-003", "maximum of three times", "manual review queue"], "category": "cross-sentence"},
+        {"fact_id": "REQ-APPROVAL-1", "fact": "Privileged access needs line manager and Security Operations approval.", "required_terms": ["REQ-ACC-004", "line manager", "Security Operations"], "category": "multiple-conditions"}
+      ]
+    },
+    {
+      "source_id": "approval-matrix",
+      "path": "fixtures/requirements/approval_matrix.csv",
+      "phase": "requirements",
+      "facts": [
+        {"fact_id": "REQ-TABLE-1", "fact": "Emergency access needs Security Operations and the incident commander within 30 minutes.", "required_terms": ["Emergency access", "Security Operations", "Incident commander", "30 minutes"], "category": "table"},
+        {"fact_id": "REQ-TABLE-2", "fact": "Privileged access needs line manager and Security Operations approval.", "required_terms": ["Privileged access", "Line manager", "Security Operations"], "category": "alternative-source"}
+      ]
+    },
+    {
+      "source_id": "integration-notes",
+      "path": "fixtures/requirements/integration_notes.html",
+      "phase": "requirements",
+      "facts": [
+        {"fact_id": "REQ-INTEGRATION-1", "fact": "A directory timeout leaves provisioning pending and must not create a duplicate account.", "required_terms": ["times out", "remains pending", "must not create a duplicate"], "category": "heading-and-negation"},
+        {"fact_id": "REQ-AUDIT-1", "fact": "Provisioning attempts record timestamp, outcome, and correlation identifier.", "required_terms": ["provisioning attempt", "timestamp", "outcome", "correlation identifier"], "category": "audit"}
+      ]
+    },
+    {
+      "source_id": "requirements-meeting",
+      "path": "fixtures/requirements/meeting.srt",
+      "phase": "requirements",
+      "facts": [
+        {"fact_id": "REQ-MEETING-1", "fact": "Priya said identifiers cannot be recycled after termination.", "required_terms": ["Priya", "identifiers cannot be recycled", "termination"], "category": "speaker-provenance"},
+        {"fact_id": "REQ-MEETING-2", "fact": "Marco said payroll calculation is not required in the first release.", "required_terms": ["Marco", "do not require payroll calculation", "first release"], "category": "speaker-and-negation"},
+        {"fact_id": "REQ-MEETING-3", "fact": "Priya said privileged access needs Security Operations approval.", "required_terms": ["Priya", "Privileged access", "Security Operations approval"], "category": "alternative-source"}
+      ]
+    },
+    {
+      "source_id": "untrusted-evidence",
+      "path": "fixtures/adversarial/untrusted_instructions.txt",
+      "phase": "requirements",
+      "facts": [
+        {"fact_id": "ADV-REAL-1", "fact": "Cryptocurrency payments are excluded from version one.", "required_terms": ["actual recorded decision", "cryptocurrency payments", "excluded from version one"], "category": "prompt-injection-evidence"}
+      ]
+    },
+    {
+      "source_id": "governance-notes", "path": "fixtures/planning/governance_notes.txt", "phase": "planning",
+      "facts": [
+        {"fact_id":"PLAN-GOV-1","fact":"Elena Park is executive sponsor.","required_terms":["Elena Park","executive sponsor"],"category":"exact-name"},
+        {"fact_id":"PLAN-GOV-2","fact":"Budget is not approved.","required_terms":["budget has not been approved","must not be presented as final"],"category":"negation"},
+        {"fact_id":"PLAN-GOV-3","fact":"Pilot starts 15 October 2026.","required_terms":["15 October 2026","approved pilot"],"category":"exact-date"}
+      ]
+    },
+    {
+      "source_id": "security-requirements", "path": "fixtures/requirements/security_requirements.txt", "phase": "requirements",
+      "facts": [
+        {"fact_id":"REQ-SEC-1","fact":"SEC-AUTH-017 requires phishing-resistant MFA.","required_terms":["SEC-AUTH-017","phishing-resistant","privileged administrators"],"category":"exact-identifier"},
+        {"fact_id":"REQ-SEC-2","fact":"Privileged sessions expire after 15 inactive minutes.","required_terms":["15 minutes","inactivity"],"category":"number"},
+        {"fact_id":"REQ-SEC-3","fact":"Audit records remain for seven years.","required_terms":["seven years","JSON Lines"],"category":"retention"}
+      ]
+    },
+    {
+      "source_id": "integration-contract", "path": "fixtures/requirements/integration_contract.txt", "phase": "requirements",
+      "facts": [
+        {"fact_id":"REQ-INT-1","fact":"INT-DIR-204 has four input fields.","required_terms":["INT-DIR-204","workforce_id","requested_roles"],"category":"exact-identifier"},
+        {"fact_id":"REQ-INT-2","fact":"HTTP 429 retries with backoff capped at 60 seconds.","required_terms":["HTTP 429","exponential backoff","60 seconds"],"category":"number-and-code"},
+        {"fact_id":"REQ-INT-3","fact":"HTTP 400 is not retried.","required_terms":["HTTP 400","not retried"],"category":"negation"}
+      ]
+    },
+    {
+      "source_id": "conflicting-vendor-note", "path": "fixtures/adversarial/conflicting_vendor_note.txt", "phase": "requirements",
+      "facts": [
+        {"fact_id":"ADV-CONFLICT-1","fact":"Vendor note conflicts with approved ordinary-access authority.","required_terms":["vendor claims","conflicts","approved matrix"],"category":"conflict"},
+        {"fact_id":"ADV-INJECT-2","fact":"Evidence contains a malicious approval instruction.","required_terms":["Ignore CrewLane's rules","instruction inside evidence","not a project requirement"],"category":"prompt-injection-evidence"}
+      ]
+    }
+  ]
+}

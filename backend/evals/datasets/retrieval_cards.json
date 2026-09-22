@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "description": "Controlled card corpus for the PostgreSQL hybrid retrieval baseline.",
+  "cards": [
+    {"item_id": "card-scope-v1", "coverage_area": "scope", "body": "Version one includes employee onboarding, manager approval, account provisioning, and access revocation. Payroll calculation and international payments are excluded."},
+    {"item_id": "card-worker-source", "coverage_area": "stakeholders", "body": "Human Resources is the source of truth for worker status."},
+    {"item_id": "card-identity-policy", "coverage_area": "data", "body": "Every worker receives a unique workforce identifier, and an identifier is never reused after the worker leaves."},
+    {"item_id": "card-retry-policy", "coverage_area": "failure_paths", "body": "Directory provisioning is retried at most three times; after the third failure, the request enters manual review."},
+    {"item_id": "card-privileged-approval", "coverage_area": "rules_calculations", "body": "Privileged access requires approval from both the line manager and Security Operations."},
+    {"item_id": "card-provisioning-audit", "coverage_area": "constraints_compliance", "body": "Every provisioning attempt records its timestamp, outcome, and correlation identifier."},
+    {"item_id":"card-governance","coverage_area":"stakeholders","body":"Elena Park is executive sponsor, Omar Haddad is delivery lead, and architecture decisions require Architecture Council review."},
+    {"item_id":"card-privileged-security","coverage_area":"constraints_compliance","body":"SEC-AUTH-017 requires phishing-resistant multi-factor authentication for privileged administrators and a 15-minute inactivity timeout."},
+    {"item_id":"card-directory-contract","coverage_area":"integrations","body":"INT-DIR-204 uses an X-Idempotency-Key header; HTTP 429 is retried with exponential backoff capped at 60 seconds, while HTTP 400 is not retried."},
+    {"item_id":"card-audit-retention","coverage_area":"constraints_compliance","body":"Audit records are retained for seven years and exported as JSON Lines."}
+  ]
+}
+

@@ -1,0 +1,9 @@
+The first release is intended for internal employees and contractors.
+
+Managers approve ordinary access requests. Security Operations must approve privileged access.
+
+The team explicitly excluded payroll calculation from version one. Payroll will continue to run
+in the existing provider, and CrewLane must not infer that payroll processing is part of scope.
+
+The project sponsor is Priya Shah. Human Resources is the source of truth for worker status.
+

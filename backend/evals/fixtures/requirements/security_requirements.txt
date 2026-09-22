@@ -1,0 +1,2 @@
+SEC-AUTH-017 requires phishing-resistant multi-factor authentication for privileged administrators. Sessions for privileged administrators expire after 15 minutes of inactivity. Customer support agents may view an account summary but must not view payroll data. Audit records are retained for seven years and exported in JSON Lines format.
+

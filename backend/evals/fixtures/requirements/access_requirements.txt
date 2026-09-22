@@ -1,0 +1,12 @@
+REQ-ACC-001. Every worker must receive a unique workforce identifier.
+
+REQ-ACC-002. A workforce identifier must never be reused after a worker leaves the organization.
+
+REQ-ACC-003. Failed directory provisioning requests must be retried a maximum of three times.
+After the third failure, the request must be placed in a manual review queue.
+
+REQ-ACC-004. Privileged access requires approval from both the line manager and Security
+Operations.
+
+REQ-ACC-005. The system must record who approved privileged access and when the approval occurred.
+

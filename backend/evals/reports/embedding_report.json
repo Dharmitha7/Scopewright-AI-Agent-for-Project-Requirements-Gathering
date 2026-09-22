@@ -1,0 +1,603 @@
+{
+  "chunk_dataset": "C:\\Users\\dharm\\crewlane-idea\\backend\\evals\\datasets\\chunking_cases.json",
+  "query_dataset": "C:\\Users\\dharm\\crewlane-idea\\backend\\evals\\datasets\\embedding_queries.json",
+  "summary": {
+    "model": "google/embeddinggemma-300m",
+    "dimensions": 768,
+    "chunks": 16,
+    "queries": 13,
+    "invalid_document_vectors": [],
+    "invalid_query_vectors": [],
+    "queries_without_relevant_chunk": [],
+    "recall_at_1": 0.7692307692307693,
+    "recall_at_3": 0.9230769230769231,
+    "recall_at_5": 1.0,
+    "mrr": 0.8525641025641026
+  },
+  "by_category": {
+    "adversarial-source": {
+      "queries": 1,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    "cross-sentence": {
+      "queries": 1,
+      "recall_at_1": 0.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 0.3333333333333333
+    },
+    "exact-identifier": {
+      "queries": 1,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    "hard-negative": {
+      "queries": 1,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    "negation-paraphrase": {
+      "queries": 1,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    "paraphrase": {
+      "queries": 3,
+      "recall_at_1": 0.6666666666666666,
+      "recall_at_3": 0.6666666666666666,
+      "recall_at_5": 1.0,
+      "mrr": 0.75
+    },
+    "semantic": {
+      "queries": 3,
+      "recall_at_1": 0.6666666666666666,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 0.8333333333333334
+    },
+    "speaker": {
+      "queries": 1,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    },
+    "table": {
+      "queries": 1,
+      "recall_at_1": 1.0,
+      "recall_at_3": 1.0,
+      "recall_at_5": 1.0,
+      "mrr": 1.0
+    }
+  },
+  "queries": [
+    {
+      "query_id": "Q-001",
+      "query": "Is payroll processing part of the first release?",
+      "relevant_fact_ids": [
+        "PLAN-SCOPE-1",
+        "PLAN-SCOPE-3",
+        "REQ-MEETING-2"
+      ],
+      "category": "paraphrase",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "kickoff-notes#chunk-0",
+        "planning-brief#chunk-1",
+        "requirements-meeting#chunk-0"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "kickoff-notes#chunk-0",
+          "score": 0.6220254801720959
+        },
+        {
+          "chunk_id": "requirements-meeting#chunk-0",
+          "score": 0.4911403686729554
+        },
+        {
+          "chunk_id": "planning-brief#chunk-1",
+          "score": 0.4879654221180438
+        },
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.30294049205421203
+        },
+        {
+          "chunk_id": "security-requirements#chunk-0",
+          "score": 0.29452768989943356
+        }
+      ]
+    },
+    {
+      "query_id": "Q-002",
+      "query": "Can the launch version make international payments?",
+      "relevant_fact_ids": [
+        "PLAN-SCOPE-2"
+      ],
+      "category": "paraphrase",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "planning-brief#chunk-1"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "planning-brief#chunk-1",
+          "score": 0.35049195952976586
+        },
+        {
+          "chunk_id": "kickoff-notes#chunk-0",
+          "score": 0.3192123621444725
+        },
+        {
+          "chunk_id": "untrusted-evidence#chunk-0",
+          "score": 0.3035394218023044
+        },
+        {
+          "chunk_id": "requirements-meeting#chunk-0",
+          "score": 0.20305144755004045
+        },
+        {
+          "chunk_id": "integration-contract#chunk-0",
+          "score": 0.1771863474110534
+        }
+      ]
+    },
+    {
+      "query_id": "Q-003",
+      "query": "Who is authoritative for a worker's employment status?",
+      "relevant_fact_ids": [
+        "PLAN-SOURCE-1"
+      ],
+      "category": "paraphrase",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "kickoff-notes#chunk-0"
+      ],
+      "first_relevant_rank": 4,
+      "recall_at_1": false,
+      "recall_at_3": false,
+      "recall_at_5": true,
+      "reciprocal_rank": 0.25,
+      "top_5": [
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.4015565339967681
+        },
+        {
+          "chunk_id": "planning-brief#chunk-2",
+          "score": 0.3948954178449557
+        },
+        {
+          "chunk_id": "requirements-meeting#chunk-0",
+          "score": 0.3437193844713299
+        },
+        {
+          "chunk_id": "kickoff-notes#chunk-0",
+          "score": 0.3380404416881659
+        },
+        {
+          "chunk_id": "planning-brief#chunk-3",
+          "score": 0.3067719244271068
+        }
+      ]
+    },
+    {
+      "query_id": "Q-004",
+      "query": "How does the system identify each member of the workforce?",
+      "relevant_fact_ids": [
+        "REQ-ID-1"
+      ],
+      "category": "semantic",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "access-requirements#chunk-0"
+      ],
+      "first_relevant_rank": 2,
+      "recall_at_1": false,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 0.5,
+      "top_5": [
+        {
+          "chunk_id": "integration-notes#chunk-0",
+          "score": 0.4620397452099927
+        },
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.4619266559338829
+        },
+        {
+          "chunk_id": "planning-brief#chunk-0",
+          "score": 0.44855266406810307
+        },
+        {
+          "chunk_id": "planning-brief#chunk-2",
+          "score": 0.4449051928528733
+        },
+        {
+          "chunk_id": "kickoff-notes#chunk-0",
+          "score": 0.3740451534558992
+        }
+      ]
+    },
+    {
+      "query_id": "Q-005",
+      "query": "May an old employee number be assigned to somebody else?",
+      "relevant_fact_ids": [
+        "REQ-ID-2",
+        "REQ-MEETING-1"
+      ],
+      "category": "negation-paraphrase",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "access-requirements#chunk-0",
+        "requirements-meeting#chunk-0"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "requirements-meeting#chunk-0",
+          "score": 0.3815931204002212
+        },
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.3514987115472822
+        },
+        {
+          "chunk_id": "kickoff-notes#chunk-0",
+          "score": 0.30469642559866006
+        },
+        {
+          "chunk_id": "planning-brief#chunk-3",
+          "score": 0.27798979285498443
+        },
+        {
+          "chunk_id": "planning-brief#chunk-0",
+          "score": 0.2746653714739372
+        }
+      ]
+    },
+    {
+      "query_id": "Q-006",
+      "query": "What happens after directory provisioning fails three times?",
+      "relevant_fact_ids": [
+        "REQ-RETRY-1"
+      ],
+      "category": "cross-sentence",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "access-requirements#chunk-0"
+      ],
+      "first_relevant_rank": 3,
+      "recall_at_1": false,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "top_5": [
+        {
+          "chunk_id": "integration-notes#chunk-1",
+          "score": 0.6275673369566057
+        },
+        {
+          "chunk_id": "integration-notes#chunk-2",
+          "score": 0.45822679373871317
+        },
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.4397021415552928
+        },
+        {
+          "chunk_id": "planning-brief#chunk-3",
+          "score": 0.43041916091379845
+        },
+        {
+          "chunk_id": "integration-contract#chunk-0",
+          "score": 0.35120696088805187
+        }
+      ]
+    },
+    {
+      "query_id": "Q-007",
+      "query": "Which people must authorize privileged permissions?",
+      "relevant_fact_ids": [
+        "REQ-APPROVAL-1",
+        "PLAN-STAKE-1",
+        "REQ-TABLE-2",
+        "REQ-MEETING-3"
+      ],
+      "category": "semantic",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "access-requirements#chunk-0",
+        "approval-matrix#chunk-0",
+        "kickoff-notes#chunk-0",
+        "requirements-meeting#chunk-0"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "approval-matrix#chunk-0",
+          "score": 0.5041761188495812
+        },
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.49051124995978673
+        },
+        {
+          "chunk_id": "planning-brief#chunk-2",
+          "score": 0.4730736474287982
+        },
+        {
+          "chunk_id": "requirements-meeting#chunk-0",
+          "score": 0.461356633981062
+        },
+        {
+          "chunk_id": "security-requirements#chunk-0",
+          "score": 0.45659049089471304
+        }
+      ]
+    },
+    {
+      "query_id": "Q-008",
+      "query": "What is the emergency access approval deadline?",
+      "relevant_fact_ids": [
+        "REQ-TABLE-1"
+      ],
+      "category": "table",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "approval-matrix#chunk-0"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "approval-matrix#chunk-0",
+          "score": 0.48523447168717926
+        },
+        {
+          "chunk_id": "governance-notes#chunk-0",
+          "score": 0.3421982505585817
+        },
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.3201456684919091
+        },
+        {
+          "chunk_id": "requirements-meeting#chunk-0",
+          "score": 0.28185542398222585
+        },
+        {
+          "chunk_id": "conflicting-vendor-note#chunk-0",
+          "score": 0.2709993790296998
+        }
+      ]
+    },
+    {
+      "query_id": "Q-009",
+      "query": "How do we prevent duplicate directory accounts after a timeout?",
+      "relevant_fact_ids": [
+        "REQ-INTEGRATION-1"
+      ],
+      "category": "hard-negative",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "integration-notes#chunk-1"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "integration-notes#chunk-1",
+          "score": 0.6744421514052543
+        },
+        {
+          "chunk_id": "integration-contract#chunk-0",
+          "score": 0.41352870463231284
+        },
+        {
+          "chunk_id": "integration-notes#chunk-2",
+          "score": 0.367963622768483
+        },
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.36584001965497326
+        },
+        {
+          "chunk_id": "security-requirements#chunk-0",
+          "score": 0.32835452198185966
+        }
+      ]
+    },
+    {
+      "query_id": "Q-010",
+      "query": "Which fields are captured for every provisioning attempt?",
+      "relevant_fact_ids": [
+        "REQ-AUDIT-1"
+      ],
+      "category": "semantic",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "integration-notes#chunk-2"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "integration-notes#chunk-2",
+          "score": 0.6066021144973727
+        },
+        {
+          "chunk_id": "integration-notes#chunk-1",
+          "score": 0.425432349942233
+        },
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.4243130906234543
+        },
+        {
+          "chunk_id": "planning-brief#chunk-3",
+          "score": 0.3457860690292849
+        },
+        {
+          "chunk_id": "approval-matrix#chunk-0",
+          "score": 0.3303677128584199
+        }
+      ]
+    },
+    {
+      "query_id": "Q-011",
+      "query": "What did Priya say about reusing identifiers?",
+      "relevant_fact_ids": [
+        "REQ-MEETING-1"
+      ],
+      "category": "speaker",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "requirements-meeting#chunk-0"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "requirements-meeting#chunk-0",
+          "score": 0.5384624913101912
+        },
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.37951712202659654
+        },
+        {
+          "chunk_id": "kickoff-notes#chunk-0",
+          "score": 0.2948135096408336
+        },
+        {
+          "chunk_id": "security-requirements#chunk-0",
+          "score": 0.2579967170496046
+        },
+        {
+          "chunk_id": "planning-brief#chunk-0",
+          "score": 0.253297947710248
+        }
+      ]
+    },
+    {
+      "query_id": "Q-012",
+      "query": "Are cryptocurrency payments in version one?",
+      "relevant_fact_ids": [
+        "ADV-REAL-1"
+      ],
+      "category": "adversarial-source",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "untrusted-evidence#chunk-0"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "untrusted-evidence#chunk-0",
+          "score": 0.5431926320873224
+        },
+        {
+          "chunk_id": "planning-brief#chunk-1",
+          "score": 0.4123886237751531
+        },
+        {
+          "chunk_id": "kickoff-notes#chunk-0",
+          "score": 0.3148234726513329
+        },
+        {
+          "chunk_id": "requirements-meeting#chunk-0",
+          "score": 0.17821337313543056
+        },
+        {
+          "chunk_id": "security-requirements#chunk-0",
+          "score": 0.16797393925621515
+        }
+      ]
+    },
+    {
+      "query_id": "Q-013",
+      "query": "What is REQ-ACC-003?",
+      "relevant_fact_ids": [
+        "REQ-RETRY-1"
+      ],
+      "category": "exact-identifier",
+      "query_vector_valid": true,
+      "relevant_chunk_ids": [
+        "access-requirements#chunk-0"
+      ],
+      "first_relevant_rank": 1,
+      "recall_at_1": true,
+      "recall_at_3": true,
+      "recall_at_5": true,
+      "reciprocal_rank": 1.0,
+      "top_5": [
+        {
+          "chunk_id": "access-requirements#chunk-0",
+          "score": 0.47459762848007814
+        },
+        {
+          "chunk_id": "security-requirements#chunk-0",
+          "score": 0.2504526578482487
+        },
+        {
+          "chunk_id": "approval-matrix#chunk-0",
+          "score": 0.24743153815548988
+        },
+        {
+          "chunk_id": "planning-brief#chunk-1",
+          "score": 0.23105191510963488
+        },
+        {
+          "chunk_id": "kickoff-notes#chunk-0",
+          "score": 0.229377031945862
+        }
+      ]
+    }
+  ]
+}

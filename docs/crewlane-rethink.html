@@ -1,0 +1,562 @@
+<title>CrewLane Rethink</title>
+<style>
+  :root {
+    --paper: #FAFAF7;
+    --surface: #F1F2ED;
+    --ink: #1C2422;
+    --muted: #5C6B66;
+    --line: #E0E4DD;
+    --accent: #1F6F5C;
+    --accent-ink: #FFFFFF;
+    --amber: #B07C24;
+    --amber-bg: #F7EFE0;
+    --accent-bg: #E8F0EC;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #141A18;
+      --surface: #1C2422;
+      --ink: #E8ECE8;
+      --muted: #93A29B;
+      --line: #2A342F;
+      --accent: #5BBFA3;
+      --accent-ink: #10201A;
+      --amber: #D9A84E;
+      --amber-bg: #2A2418;
+      --accent-bg: #1B2A25;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #141A18;
+    --surface: #1C2422;
+    --ink: #E8ECE8;
+    --muted: #93A29B;
+    --line: #2A342F;
+    --accent: #5BBFA3;
+    --accent-ink: #10201A;
+    --amber: #D9A84E;
+    --amber-bg: #2A2418;
+    --accent-bg: #1B2A25;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.65;
+    margin: 0;
+    font-size: 16px;
+  }
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 2.2rem 1.25rem 5rem; }
+  .eyebrow {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.4rem;
+  }
+  h1, h2, h3 {
+    font-family: "Charter", "Iowan Old Style", Georgia, serif;
+    text-wrap: balance;
+    line-height: 1.2;
+  }
+  h1 { font-size: 2.1rem; margin: 0.2rem 0 0.6rem; font-weight: 700; }
+  h2 { font-size: 1.55rem; margin: 0 0 0.9rem; }
+  h3 { font-size: 1.1rem; margin: 1.4rem 0 0.4rem; }
+  p { margin: 0 0 1rem; max-width: 65ch; }
+  section.block { border-top: 1px solid var(--line); padding-top: 2rem; margin-top: 2.6rem; }
+  section.block:first-child { border-top: none; padding-top: 0.5rem; margin-top: 0; }
+  .lede { font-size: 1.13rem; max-width: 62ch; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.2rem 0 0; }
+  .chip {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.72rem; letter-spacing: 0.05em;
+    padding: 0.28rem 0.65rem; border-radius: 2px;
+    background: var(--surface); color: var(--muted);
+    border: 1px solid var(--line);
+  }
+  .chip.go { background: var(--accent-bg); color: var(--accent); border-color: transparent; }
+  .chip.warn { background: var(--amber-bg); color: var(--amber); border-color: transparent; }
+
+  /* tab navigation */
+  nav.tabs {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--paper);
+    display: flex; gap: 0.2rem;
+    border-bottom: 1px solid var(--line);
+    margin: 1.4rem 0 0;
+    overflow-x: auto;
+  }
+  nav.tabs button {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase;
+    background: none; border: none; cursor: pointer;
+    color: var(--muted);
+    padding: 0.7rem 0.8rem 0.6rem;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+  }
+  nav.tabs button:hover { color: var(--ink); }
+  nav.tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  nav.tabs button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .oneliner {
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    padding: 1rem 1.25rem;
+    margin: 1.4rem 0;
+    font-family: "Charter", "Iowan Old Style", Georgia, serif;
+    font-size: 1.15rem;
+    max-width: 62ch;
+  }
+
+  /* journey steps */
+  ol.journey { list-style: none; counter-reset: step; margin: 1.4rem 0; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
+  ol.journey li { counter-increment: step; display: grid; grid-template-columns: 2.2rem 1fr; gap: 0.9rem; }
+  ol.journey li::before {
+    content: counter(step, decimal-leading-zero);
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.78rem; color: var(--accent);
+    padding-top: 0.28rem;
+  }
+  ol.journey b { display: block; }
+  ol.journey p { margin: 0.1rem 0 0; color: var(--muted); font-size: 0.95rem; }
+
+  /* lane diagram */
+  .lane { display: flex; gap: 4px; margin: 1.4rem 0 0.4rem; overflow-x: auto; padding-bottom: 0.3rem; }
+  .lane div {
+    flex: 1; min-width: 5.2rem; text-align: center;
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.7rem; letter-spacing: 0.03em;
+    padding: 0.7rem 0.3rem; border-radius: 2px;
+    background: var(--surface); color: var(--muted);
+    border: 1px solid var(--line);
+  }
+  .lane .now { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 600; }
+  .lane-note { font-size: 0.85rem; color: var(--muted); margin-top: 0.4rem; }
+
+  /* cards + strings */
+  .model { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.4rem 0; }
+  @media (max-width: 640px) { .model { grid-template-columns: 1fr; } }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 1rem 1.1rem; }
+  .panel h4 { margin: 0 0 0.5rem; font-family: "SF Mono", "Cascadia Code", Consolas, monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .tags span {
+    font-size: 0.78rem; padding: 0.15rem 0.5rem; border-radius: 2px;
+    background: var(--paper); border: 1px solid var(--line);
+  }
+  .strings-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .strings-list code { font-family: "SF Mono", "Cascadia Code", Consolas, monospace; font-size: 0.8rem; color: var(--accent); }
+  .strings-list li { font-size: 0.9rem; }
+  .chain {
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.78rem; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 3px;
+    padding: 0.8rem 1rem; overflow-x: auto; white-space: nowrap; margin: 0.8rem 0 0;
+  }
+  .chain b { color: var(--ink); font-weight: 600; }
+
+  /* architecture diagram */
+  .arch { display: flex; flex-direction: column; gap: 0; margin: 1.4rem 0; }
+  .tier { background: var(--surface); border: 1px solid var(--line); border-radius: 3px; padding: 0.9rem 1rem 1rem; }
+  .tier h4 { margin: 0 0 0.6rem; font-family: "SF Mono", "Cascadia Code", Consolas, monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; display: flex; justify-content: space-between; gap: 0.6rem; flex-wrap: wrap; }
+  .tier h4 .where { color: var(--muted); font-weight: 400; letter-spacing: 0.04em; text-transform: none; }
+  .cells { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 0.5rem; }
+  .cell { background: var(--paper); border: 1px solid var(--line); border-radius: 2px; padding: 0.5rem 0.65rem; font-size: 0.82rem; line-height: 1.4; }
+  .cell b { display: block; font-size: 0.84rem; }
+  .cell span { color: var(--muted); font-size: 0.78rem; }
+  .bus {
+    text-align: center; padding: 0.45rem 0.5rem;
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.72rem; color: var(--muted);
+  }
+  .bus b { color: var(--accent); font-weight: 600; }
+
+  /* flow walkthroughs */
+  ol.flow { list-style: none; counter-reset: f; margin: 0.8rem 0 1.4rem; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+  ol.flow li { counter-increment: f; display: grid; grid-template-columns: 1.6rem 1fr; gap: 0.6rem; font-size: 0.93rem; }
+  ol.flow li::before {
+    content: counter(f);
+    font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 0.75rem; color: var(--accent); padding-top: 0.2rem;
+  }
+
+  /* two column in/out */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0; }
+  @media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+  .cols ul { margin: 0.4rem 0 0; padding-left: 1.1rem; }
+  .cols li { margin-bottom: 0.35rem; font-size: 0.95rem; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+  .tablewrap { overflow-x: auto; margin: 1.2rem 0; }
+  th { text-align: left; font-family: "SF Mono", "Cascadia Code", Consolas, monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 0.5rem 0.9rem 0.5rem 0; border-bottom: 1px solid var(--line); }
+  td { padding: 0.55rem 0.9rem 0.55rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td:first-child { white-space: nowrap; color: var(--muted); }
+
+  .callout {
+    background: var(--amber-bg); border-left: 3px solid var(--amber);
+    padding: 0.9rem 1.1rem; margin: 1.2rem 0; font-size: 0.95rem; max-width: 62ch;
+  }
+  .callout b { color: var(--amber); }
+
+  ul.plain { padding-left: 1.1rem; margin: 0.4rem 0 1rem; }
+  ul.plain li { margin-bottom: 0.45rem; max-width: 62ch; }
+  code.k { font-family: "SF Mono", "Cascadia Code", Consolas, monospace; font-size: 0.85em; background: var(--surface); border: 1px solid var(--line); padding: 0.06rem 0.35rem; border-radius: 2px; }
+  footer { border-top: 1px solid var(--line); margin-top: 3rem; padding-top: 1.2rem; font-size: 0.85rem; color: var(--muted); }
+  a { color: var(--accent); }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Internal · rethink of 2026-08-17</p>
+    <h1>CrewLane</h1>
+    <nav class="tabs" role="tablist">
+      <button data-page="overview" class="active">Overview</button>
+      <button data-page="experience">Experience</button>
+      <button data-page="model">Knowledge Model</button>
+      <button data-page="process">Process</button>
+      <button data-page="design">High-Level Design</button>
+      <button data-page="stack">Scope &amp; Stack</button>
+      <button data-page="next">Next Steps</button>
+    </nav>
+  </header>
+
+  <!-- ============ OVERVIEW ============ -->
+  <div class="page active" id="page-overview">
+    <section class="block">
+      <p class="lede" style="margin-top:1.4rem">An AI system that runs a software project's lifecycle - with a human decision at every gate. These pages are the single readable summary of the ground-up rethink: what the product is now, how it works, how it's built, what we deliberately changed, and exactly what gets built first.</p>
+      <div class="chips">
+        <span class="chip go">v1 scope locked</span>
+        <span class="chip go">41 decisions recorded</span>
+        <span class="chip warn">3 recorded deviations from baseline</span>
+        <span class="chip">implementation starting</span>
+      </div>
+    </section>
+    <section class="block">
+      <p class="eyebrow">The idea</p>
+      <h2>What CrewLane is</h2>
+      <p>Everyone already uses AI on project work - ad hoc, with no memory, no process, and no way to tell what the model made up. CrewLane gives that behavior structure. It follows a real software development lifecycle (our baseline is the Teaching Agile process model), interviews you like a good business analyst, absorbs whatever material your project already has, and carries everything from first idea to accepted specification with a full audit trail.</p>
+      <div class="oneliner">The AI does each phase's work. A named human accepts it before the project moves on. Nothing is ever invented, and everything traces back to who said it.</div>
+      <p>Three promises define the product:</p>
+      <ul class="plain">
+        <li><b>Never invents.</b> What you didn't say is marked <i>not stated</i> - never filled in. Claims about the outside world are researched live, with citations.</li>
+        <li><b>Everything traceable.</b> Every requirement, risk, and story links back to the exact meeting moment, document line, or message it came from.</li>
+        <li><b>Humans decide.</b> Phases end at hard gates. Acceptance is a deliberate, recorded act - a name, a timestamp, and an immutable snapshot of what was accepted.</li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <div class="page" id="page-experience">
+    <section class="block">
+      <p class="eyebrow">The experience</p>
+      <h2>How it works, start to finish</h2>
+      <ol class="journey">
+        <li><div><b>Sign in.</b><p>The app is the whole site - a sign-in wall with the logo and one line. Enter display name and email; first visit creates your account (JIT). v1 uses a signed HttpOnly session cookie (D42) — not a third-party IdP. We store only name and email on the account row.</p></div></li>
+        <li><div><b>Describe your project.</b><p>One free-text box: "What are you building?" No forms. The project name is derived from what you write. New idea or already in flight, greenfield or replacing a legacy system - all four combinations are accepted.</p></div></li>
+        <li><div><b>Feed it anything.</b><p>Type freely, upload documents (txt, md, docx, pdf, images, spreadsheets), or upload audio - a Teams recording or a voice note. Raw recordings get transcribed automatically. Everything is stored with dual provenance: who submitted it, and separately, whose words it contains.</p></div></li>
+        <li><div><b>The AI reads back before it asks.</b><p>Its first move is a mirror: "Here's what I understood, with sources. Here's what's not stated anywhere." You correct it. For an in-flight project this same step becomes a lifecycle assessment - where you actually are, what's covered, what's missing.</p></div></li>
+        <li><div><b>Interview by question cards.</b><p>Small batches of cards, each labeled with <i>why it's being asked</i>, each with an explicit "I don't know / not applicable" option. The agent drops into focused conversation when an answer needs depth. It never asks what your uploads already answered.</p></div></li>
+        <li><div><b>Knowledge accumulates as cards.</b><p>Everything learned becomes typed, source-linked knowledge (see the Knowledge Model page). New input is checked against what's known - duplicates strengthen existing facts, contradictions go to a review queue with names attached. Nothing is silently overwritten.</p></div></li>
+        <li><div><b>Documents render themselves.</b><p>The Project Charter and the SRS aren't files anyone maintains - they're views generated from the model, always current. Optional: ask for a grounded feasibility study (web-researched, cited, recommendations only).</p></div></li>
+        <li><div><b>Hard gates.</b><p>Planning ends when a specific snapshot of the Charter is accepted - deliberately, by name. Requirements inherits everything the Charter established, interviews across nine areas, and ends the same way with the SRS. Chat stays present throughout; there is no wizard.</p></div></li>
+      </ol>
+    </section>
+  </div>
+
+  <!-- ============ KNOWLEDGE MODEL ============ -->
+  <div class="page" id="page-model">
+    <section class="block">
+      <p class="eyebrow">The knowledge model</p>
+      <h2>Cards and strings</h2>
+      <p>A project's knowledge is stored as <b>typed cards</b> connected by <b>four kinds of strings</b> - not paragraphs in documents. This is what makes documents self-rendering, traceability automatic, and contradictions detectable.</p>
+      <div class="model">
+        <div class="panel">
+          <h4>15 card types</h4>
+          <div class="tags">
+            <span>source / evidence</span><span>business need</span><span>actor</span><span>use case</span><span>requirement</span><span>constraint</span><span>assumption</span><span>data entity</span><span>interface</span><span>story</span><span>risk</span><span>stakeholder</span><span>decision</span><span>open question</span><span>glossary term</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h4>4 string types</h4>
+          <ul class="strings-list">
+            <li><code>supported-by</code> - where a fact came from (the provenance spine)</li>
+            <li><code>derived-from</code> - why it exists (the traceability matrix)</li>
+            <li><code>depends-on</code> - what must come first</li>
+            <li><code>conflicts-with</code> - held until a human resolves it</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-bottom:0.3rem">One chain answers the question every real project loses track of:</p>
+      <div class="chain"><b>Jira story</b> ← derived-from ← <b>use case</b> ← derived-from ← <b>business need</b> ← supported-by ← <b>kickoff call, Aug 1, 14:32</b></div>
+      <p class="lane-note" style="margin-top:0.7rem">Every card carries status (candidate → confirmed → accepted), version history, and priority as fields. Fields for structure, strings for the web - and no untyped "related-to" links, ever.</p>
+    </section>
+    <section class="block">
+      <p class="eyebrow">The belief layer</p>
+      <h2>How new input meets what's known</h2>
+      <p>Every piece of input - a chat message, a document line, a transcript segment - first produces <b>candidate</b> facts, not truth. Each candidate is compared against the existing cards (semantic retrieval over the project's model):</p>
+      <ul class="plain">
+        <li><b>New?</b> A candidate card is created, strung to its evidence.</li>
+        <li><b>Duplicate?</b> It merges into the existing card as corroboration - one more <code class="k">supported-by</code> string, a stronger fact.</li>
+        <li><b>Contradiction?</b> A <code class="k">conflicts-with</code> string is created and the pair goes to the human review queue, with the names and sources of both sides attached. Nothing is silently overwritten.</li>
+      </ul>
+      <p>Dual provenance is kept throughout: who <i>submitted</i> the material, and separately, whose <i>words</i> it contains. An uploaded recording of someone else's statement credits the speaker, not the uploader.</p>
+    </section>
+  </div>
+
+  <!-- ============ PROCESS ============ -->
+  <div class="page" id="page-process">
+    <section class="block">
+      <p class="eyebrow">Process fidelity</p>
+      <h2>The lifecycle, and what we changed</h2>
+      <p>CrewLane follows the Teaching Agile SDLC as its baseline. Every deviation is deliberate, recorded, and reversible - the process itself is versioned configuration (a <b>template</b>: phases, coverage areas, gate rules, document formats), so other organizations' processes become data, not forks.</p>
+      <div class="lane">
+        <div class="now">1 · Planning</div>
+        <div class="now">2 · Requirements</div>
+        <div>3 · Design</div>
+        <div>4 · Development</div>
+        <div>5 · Testing</div>
+        <div>6 · Deployment</div>
+        <div>7 · Maintenance</div>
+      </div>
+      <p class="lane-note">v1 builds phases 1-2 end to end. The engine is phase-agnostic; later phases arrive as template data plus new capabilities, not rewrites.</p>
+
+      <h3>Planning, v1 template</h3>
+      <ul class="plain">
+        <li><b>4 core areas:</b> business need &amp; vision · scope &amp; exclusions · stakeholders · risks. Follow-ups until substantive, or an explicit N/A with a reason.</li>
+        <li><b>Feasibility:</b> optional - offered as grounded, cited research with recommendations; never gating.</li>
+        <li><b>Gate:</b> hard. The Charter snapshot must be accepted, by name, before Requirements begins.</li>
+      </ul>
+
+      <h3>Requirements, v1 template</h3>
+      <ul class="plain">
+        <li><b>9 areas:</b> product boundary (inherited from the Charter, not re-asked) · users &amp; goals · tasks &amp; scenarios · failure paths · rules &amp; calculations · data · external interfaces · quality targets with numbers · constraints &amp; compliance (light).</li>
+        <li><b>Outputs:</b> the SRS view, plus use cases, stories with acceptance criteria, and an always-current traceability view - all rendered from the same cards.</li>
+        <li><b>Gate:</b> hard, on the SRS snapshot. Jira push is deferred until after the Design phase is designed.</li>
+      </ul>
+
+      <div class="callout"><b>Three recorded deviations from the baseline:</b> (1) resources / timeline / budget dropped from v1 Planning; (2) feasibility made fully optional - the baseline treats its go / no-go as Planning's center, this is our deepest cut; (3) no role separation - anyone in a project can accept, accountability carried entirely by the audit record. Each has a written reason and a template-level return path.</div>
+    </section>
+    <section class="block">
+      <p class="eyebrow">Leverage</p>
+      <h2>Where the AI earns its keep</h2>
+      <p>Measured against the baseline's fifteen requirements-gathering techniques, CrewLane fully mimics nine and partially covers five - and on four of them it beats common manual practice:</p>
+      <ul class="plain">
+        <li><b>Interviews</b> - adaptive, always available, never forgets a follow-up.</li>
+        <li><b>Document analysis</b> - reads everything, links every extracted fact to its line.</li>
+        <li><b>Benchmarking &amp; research</b> - live web search with citations, never from memory.</li>
+        <li><b>Role-play</b> (planned) - the AI plays user personas to stress-test requirements before anyone builds.</li>
+      </ul>
+      <p><b>Hybrid retrieval</b> (pgvector HNSW + Postgres full-text search, D63–D66) powers the connective tissue: duplicate detection in the belief layer (vector-only dedupe), chat answers grounded in cards and uploaded evidence, "does the uploaded material already answer this?", and evidence-aside questions with file provenance (<code class="k">[evidence:filename#chunk]</code>). Vector and keyword channels are fused by reciprocal rank fusion; exact tokens ("Stripe", "70%") survive via FTS even when embeddings blur them. Cross-project organizational memory remains deferred.</p>
+    </section>
+  </div>
+
+  <!-- ============ HIGH-LEVEL DESIGN ============ -->
+  <div class="page" id="page-design">
+    <section class="block">
+      <p class="eyebrow">Architecture</p>
+      <h2>High-level design</h2>
+      <p>Two deployables and a set of managed stores. The web app is one Next.js application; the backend is one FastAPI process that contains the REST API, the LangGraph agent runtime, and the background worker - a deliberate monolith for v1, split later only if load demands it. Everything external sits behind a port (a thin interface), which is what makes the free-tier hosts swappable for an on-prem box.</p>
+
+      <div class="arch">
+        <div class="tier">
+          <h4>Web app <span class="where">Next.js App Router · TypeScript · Tailwind · Vercel</span></h4>
+          <div class="cells">
+            <div class="cell"><b>Chat spine</b><span>always present, Claude-web style; AG-UI client via CopilotKit</span></div>
+            <div class="cell"><b>Widget renderer</b><span>A2UI trusted catalog: question card, coverage meter, conflict card, acceptance panel</span></div>
+            <div class="cell"><b>Workspace</b><span>rendered documents (Charter, SRS), cards browser, review queue</span></div>
+            <div class="cell"><b>Intake</b><span>free text, file &amp; audio upload</span></div>
+          </div>
+        </div>
+        <div class="bus">↑ ↓ &nbsp;<b>AG-UI event stream</b> (agent turns, widget payloads) · <b>REST</b> via OpenAPI-generated TS client · signed session cookie on every request (D42)</div>
+        <div class="tier">
+          <h4>Backend <span class="where">FastAPI · one Python process · Render</span></h4>
+          <div class="cells">
+            <div class="cell"><b>REST API</b><span>projects, cards, strings, snapshots, uploads, review queue; sole writer to the database</span></div>
+            <div class="cell"><b>Agent runtime</b><span>LangGraph graphs; hard gates are durable interrupts, state in the Postgres checkpointer</span></div>
+            <div class="cell"><b>Worker</b><span>in-process loop on a Postgres job queue: parse, transcribe, embed, extract</span></div>
+            <div class="cell"><b>Belief layer</b><span>candidate facts vs known cards: merge, corroborate, or flag conflict</span></div>
+            <div class="cell"><b>View renderer</b><span>deterministic Charter / SRS rendering from cards - no LLM in this path</span></div>
+            <div class="cell"><b>Ports</b><span>storage (S3 API), inference, embeddings, web search, transcription - all swappable by config</span></div>
+          </div>
+        </div>
+        <div class="bus">↓ &nbsp;SQL · S3 API · HTTPS</div>
+        <div class="tier">
+          <h4>Stores &amp; external services</h4>
+          <div class="cells">
+            <div class="cell"><b>Neon Postgres</b><span>cards, strings, snapshots, audit log, job queue, LangGraph checkpoints, pgvector embeddings (768-dim HNSW), generated tsvector for hybrid FTS</span></div>
+            <div class="cell"><b>Cloudflare R2</b><span>raw uploads: documents, audio, images (S3 API behind the storage port)</span></div>
+            <div class="cell"><b>Groq</b><span>LLM inference + Whisper transcription, model-agnostic by config</span></div>
+            <div class="cell"><b>Embeddings + web search APIs</b><span>free tier, picked at wiring time, behind ports</span></div>
+            <div class="cell"><b>Session auth</b><span>signed HttpOnly cookie in v1 (D42); Stytch deferred to semi-public deploy (D44)</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="lane-note">Rule of the diagram: the frontend never touches a store directly, agents never write accepted state, and only the REST API writes to Postgres. The audit log is append-only.</p>
+    </section>
+
+    <section class="block">
+      <p class="eyebrow">Key flows</p>
+      <h2>Three flows explain the whole system</h2>
+
+      <h3>Ingestion - anything in, typed knowledge out</h3>
+      <ol class="flow">
+        <li>Upload lands in R2; a job row is queued in Postgres; the API returns immediately.</li>
+        <li>The worker picks it up: parse (documents) or transcribe via Whisper (audio), chunk with overlap (D64), embed into pgvector (768-dim, Gemini).</li>
+        <li>Extraction proposes <b>candidate facts</b>, each strung <code class="k">supported-by</code> to its exact chunk, with dual provenance (submitter and speaker).</li>
+        <li>The belief layer compares candidates to known cards (indexed vector dedupe, meaning-first conflict scan): new → candidate card; duplicate → corroboration; contradiction → <code class="k">conflicts-with</code> + review queue.</li>
+        <li>The UI's coverage meters and "already answered" checks update from the same data.</li>
+      </ol>
+
+      <h3>Conversation - the interview loop</h3>
+      <ol class="flow">
+        <li>A user message (or answered question card) reaches the LangGraph graph through the AG-UI endpoint.</li>
+        <li>The graph reads the project model plus hybrid retrieval over cards and evidence (vector + keyword, RRF-fused on Postgres) — it skips areas uploads already cover and answers evidence asides with provenance labels.</li>
+        <li>It replies with streamed text and A2UI widget payloads (question cards with their "why", conflict cards, coverage meters) chosen from our trusted catalog - the agent picks widgets, it cannot invent UI.</li>
+        <li>Answers flow back through the same belief-layer path as any other input. Every turn is checkpointed, so a closed laptop resumes mid-interview.</li>
+      </ol>
+
+      <h3>Gate - how a phase actually ends</h3>
+      <ol class="flow">
+        <li>Coverage rules from the phase template are satisfied (or explicitly N/A'd); the agent proposes gate readiness.</li>
+        <li>The backend freezes an immutable snapshot of the relevant cards and renders the document view (Charter or SRS) from it - deterministically, no LLM.</li>
+        <li>The graph hits a durable interrupt. The acceptance panel shows the snapshot; the human accepts or sends it back with reasons.</li>
+        <li>Acceptance writes the audit record - name, timestamp, snapshot ID - and resumes the graph into the next phase, which inherits the accepted knowledge. Later changes to accepted ground raise change-impact flags; they never silently edit the snapshot.</li>
+      </ol>
+    </section>
+
+    <section class="block">
+      <p class="eyebrow">Principles</p>
+      <h2>Design rules that hold everywhere</h2>
+      <ul class="plain">
+        <li><b>Deterministic where it must be.</b> Gates, document rendering, audit, traceability are plain code over typed data. LLMs draft and extract; they never decide or render.</li>
+        <li><b>One writer.</b> All state changes go through the REST API; agent and worker call the same internal services. One code path to guard, one audit hook.</li>
+        <li><b>Everything behind ports.</b> Model, embeddings, search, storage, transcription are config-swappable. No vendor-exclusive features, ever - migration to on-prem is compose-up, pg_dump, object sync, env vars.</li>
+        <li><b>One database.</b> Queue, checkpoints, vectors, and domain data all live in Postgres until scale forces otherwise. One connection string, one backup, one local dev story.</li>
+        <li><b>Process as data.</b> Phase definitions, coverage areas, gate rules, and view templates are versioned rows a project pins - not code.</li>
+      </ul>
+      <div class="callout"><b>Open before low-level design:</b> ingestion format/size limits. Settled since this page was first written: the graph shape - one generic phase-runner per phase per project, gates as durable interrupts (D45-D48); single-user v1 (D43); and the physical schema - cards, strings, snapshots are real Postgres tables, snapshots hold pointers to card versions, not a document copy (D51-D52, see DECISIONS.md).</div>
+    </section>
+  </div>
+
+  <!-- ============ SCOPE & STACK ============ -->
+  <div class="page" id="page-stack">
+    <section class="block">
+      <p class="eyebrow">Scope</p>
+      <h2>v1 - in and out</h2>
+      <div class="cols">
+        <div class="panel">
+          <h4>In</h4>
+          <ul>
+            <li>Planning + Requirements, end to end</li>
+            <li>Input: free text, documents, audio (auto-transcribed)</li>
+            <li>New and in-flight projects; greenfield and brownfield (via uploaded evidence)</li>
+            <li>Living model, rendered Charter &amp; SRS, hard gates, full audit trail</li>
+            <li>Chat spine + structured workspace, agent-driven UI</li>
+            <li>Optional grounded feasibility research</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h4>Out (deferred, recorded)</h4>
+          <ul>
+            <li>Jira push - returns after the Design phase is designed</li>
+            <li>Teams connector - designed for; gated on tenant-admin consent (transcripts arrive by upload meanwhile)</li>
+            <li>Email-in, Slack/Drive/calendar connectors</li>
+            <li>Automated crawling of existing systems (repos, DBs, ticket history)</li>
+            <li>Roles &amp; permissions, template editing UI, cross-project memory</li>
+            <li>Phases 3-7</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section class="block">
+      <p class="eyebrow">Engineering</p>
+      <h2>Tech stack - all free tier, all portable</h2>
+      <div class="tablewrap"><table>
+        <tr><th>Layer</th><th>Choice</th></tr>
+        <tr><td>Frontend</td><td>Next.js App Router · TypeScript · Tailwind CSS</td></tr>
+        <tr><td>Agent ↔ UI</td><td>AG-UI SSE for chat (D58): <code class="k">POST /messages/stream</code> emits <code class="k">RUN_STARTED</code>/<code class="k">MESSAGE</code>/<code class="k">RUN_FINISHED</code>; trusted widget JSON in each message (D50). CopilotKit/A2UI renderer deferred — same catalog, streaming transport in v1.</td></tr>
+        <tr><td>Backend</td><td>FastAPI (Python), monorepo with the frontend</td></tr>
+        <tr><td>Agents</td><td>LangGraph (Python) - gates are durable interrupts via the Postgres checkpointer</td></tr>
+        <tr><td>Auth</td><td>v1: signed session cookie, name+email wall, JIT accounts (D42–D44). Return path: Stytch or another IdP when the URL is semi-public.</td></tr>
+        <tr><td>Inference</td><td>Groq free tier (LLM + Whisper transcription), model-agnostic by config</td></tr>
+        <tr><td>Database</td><td>Postgres on Neon (auto-resume ~500 ms, pgvector included) · SQLAlchemy + Alembic</td></tr>
+        <tr><td>Retrieval</td><td>Hybrid on Postgres (D63–D66): pgvector HNSW (768-dim, Gemini <code class="k">gemini-embedding-001</code>) + generated <code class="k">tsvector</code> (<code class="k">simple</code> config) fused by RRF in <code class="k">retrieval_context()</code>; sqlite/tests use in-Python fallback. Belief dedupe stays vector-only.</td></tr>
+        <tr><td>Files</td><td>Cloudflare R2 (10 GB free, S3 API) behind a storage port</td></tr>
+        <tr><td>Jobs</td><td>Postgres-backed job queue, worker in-process · upgrade path: ARQ + Redis</td></tr>
+        <tr><td>Web search</td><td>Decided at grounding time - SerpAPI / Tavily / Brave-class compared on free quotas</td></tr>
+        <tr><td>Hosting</td><td>Vercel (frontend) + Render (backend), free default URLs · FE↔BE contract via OpenAPI-generated TS client</td></tr>
+      </table></div>
+      <p><b>Portability rule:</b> no vendor-exclusive features, ever. Each host is used as "a place that runs containers / vanilla Postgres / the S3 API" - migration to an on-prem server is compose-up, pg_dump, object sync, env vars. A day, not a redesign.</p>
+    </section>
+  </div>
+
+  <!-- ============ NEXT STEPS ============ -->
+  <div class="page" id="page-next">
+    <section class="block">
+      <p class="eyebrow">Now</p>
+      <h2>v1 status</h2>
+      <ul class="plain">
+        <li><b>Branches 1–11:</b> decisions through AG-UI SSE (D58) — merged to <code class="k">main</code>.</li>
+        <li><b>Demo lane (<code class="k">demo/2026-08-19</code>):</b> intake everywhere (D59), hybrid docs/export (D60), widget catalog (D61), interview robustness (D62), gate critic, audit trail, FitStudio demo scenario.</li>
+        <li><b>RAG lane (D63–D67, merged to demo):</b> real pgvector + HNSW, chunk overlap, hybrid FTS/RRF, provenance labels, re-embed on edit — <b>complete</b>. Requires <code class="k">GEMINI_API_KEY</code> for vector channel; keyword FTS runs without it on Postgres.</li>
+        <li><b>v1 demo path:</b> sign in → create project → attach evidence → ingest-first read-back → Planning interview (stream) → RAG aside → accept Charter → Requirements → accept SRS.</li>
+        <li><b>Next lanes:</b> intake parsing depth (audio/doc), full A2UI renderer, multi-user membership, phases 3–7, cloud deploy (Neon/Render/Vercel).</li>
+      </ul>
+      <h3>Implementation history</h3>
+      <ul class="plain">
+        <li><b>Branch 1 - <code class="k">feat/1-decisions</code>:</b> all 41 decisions, deviations, and the deferred list into <code class="k">DECISIONS.md</code>. First PR.</li>
+        <li><b>Branch 2 - <code class="k">feat/2-app-shell</code>:</b> Next.js scaffold, session sign-in wall, JIT accounts, project-creation screen, README with full context. Merged.</li>
+        <li><b>Branch 3 - <code class="k">feat/3-chat-spine</code>:</b> persistent chat, messages API, sign out. Merged.</li>
+        <li><b>Branch 4 - <code class="k">feat/4-agents-lane</code>:</b> LangGraph phase-runner, durable gates, inline extraction, Planning + Requirements templates. Merged.</li>
+        <li><b>Branch 5 - <code class="k">feat/5-workspace-gates</code>:</b> REST widget catalog (D50), gate accept/revise in workspace, checkpointer startup fix (D49). Merged.</li>
+        <li><b>Branch 6 - <code class="k">feat/6-cards-snapshots</code>:</b> real <code class="k">cards</code>/<code class="k">strings</code>/<code class="k">snapshots</code> tables behind <code class="k">KnowledgePort</code> (D51-D52). Merged.</li>
+        <li><b>Branch 7 - <code class="k">feat/7-snapshots-views</code>:</b> snapshot list + deterministic Charter/SRS views (D54); session cookie is a JWT (D53). Merged.</li>
+        <li><b>Branch 8 - <code class="k">feat/8-ingestion</code>:</b> document + audio upload, MinIO storage, job worker, evidence chunks, fact extraction into cards (D55). Merged.</li>
+        <li><b>Branch 9 - <code class="k">feat/9-belief-rag</code>:</b> belief layer (duplicate/conflict), Gemini embeddings, retrieval in graph digest (D56). Merged.</li>
+        <li><b>Branch 10 - <code class="k">feat/10-conflict-feasibility</code>:</b> conflict widget, review queue UI, SerpAPI feasibility (D57). Merged.</li>
+        <li><b>Branch 11 - <code class="k">feat/finish-v1</code>:</b> AG-UI SSE chat stream (D58), E2E tests, v1 complete.</li>
+        <li><b><code class="k">feat/rag-pgvector-rework</code> → demo:</b> pgvector HNSW, hybrid FTS/RRF, chunk overlap (D63–D66). Merged PR #35.</li>
+        <li><b><code class="k">fix/rag-lane-completion</code>:</b> startup warning accuracy, doc sync (D67).</li>
+      </ul>
+      <h3>Account setup checklist (all free, ~30 min)</h3>
+      <ul class="plain">
+        <li>Local: copy <code class="k">.env.example</code> → <code class="k">.env</code>; set <code class="k">DEV_AUTH=true</code> and a <code class="k">DEV_SESSION_SECRET</code> (signs the session JWT, D53; no Stytch for v1)</li>
+        <li>Groq - API key; set <code class="k">GROQ_MODEL=openai/gpt-oss-120b</code> (older models e.g. llama-3.3-70b-versatile may be retired)</li>
+        <li>MinIO - included in <code class="k">docker compose</code> for local uploads (S3 API); or leave <code class="k">S3_*</code> empty for local-disk fallback</li>
+        <li>Gemini - <code class="k">GEMINI_API_KEY</code> for vector embeddings and full hybrid RAG (D63–D67); without it, Postgres keyword search still works for evidence asides</li>
+        <li>SerpAPI - API key for optional feasibility research (D57, `SERPAPI_KEY`)</li>
+        <li>Cloudflare R2 or Neon - for cloud deploy later (local compose is enough for v1 demo)</li>
+        <li>Ask leads: is company code on third-party free hosting OK? (blocks first deploy, nothing else)</li>
+      </ul>
+      <h3>Open discussions before low-level design</h3>
+      <ul class="plain">
+        <li>The concrete LangGraph graph - one graph per project or per phase, node inventory, chat interleaving - settled as D45-D47</li>
+        <li>Ingestion v1 specifics - formats, 25 MB limit, MinIO/local storage, extraction flow settled as D55; Whisper limits and ffmpeg chunking for long audio still open</li>
+        <li>Single-user projects in v1 - recorded as D43</li>
+        <li>Physical database schema for cards/strings/snapshots - settled as D51-D52</li>
+      </ul>
+    </section>
+  </div>
+
+  <footer>
+    CrewLane rethink · decisions of 2026-08-17 · baseline: <a href="https://teachingagile.com/sdlc/">Teaching Agile SDLC</a> · previous direction archived on <code class="k">demo/2026-07-31</code>
+  </footer>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('nav.tabs button');
+  const pages = document.querySelectorAll('.page');
+  function show(name) {
+    pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + name));
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.page === name));
+    if (location.hash !== '#' + name) history.replaceState(null, '', '#' + name);
+    window.scrollTo(0, 0);
+  }
+  tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.page)));
+  const initial = location.hash.slice(1);
+  if (document.getElementById('page-' + initial)) show(initial);
+</script>

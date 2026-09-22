@@ -1,0 +1,3 @@
+Governance and ownership
+Elena Park is the executive sponsor. The delivery lead is Omar Haddad. Architecture decisions require review by the Architecture Council. The approved pilot starts on 15 October 2026. The budget has not been approved and must not be presented as final.
+

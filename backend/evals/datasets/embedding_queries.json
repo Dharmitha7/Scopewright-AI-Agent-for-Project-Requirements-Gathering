@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "description": "Embedding-only queries. Relevant chunks are derived from chunking gold facts.",
+  "queries": [
+    {"query_id": "Q-001", "query": "Is payroll processing part of the first release?", "relevant_fact_ids": ["PLAN-SCOPE-1", "PLAN-SCOPE-3", "REQ-MEETING-2"], "category": "paraphrase"},
+    {"query_id": "Q-002", "query": "Can the launch version make international payments?", "relevant_fact_ids": ["PLAN-SCOPE-2"], "category": "paraphrase"},
+    {"query_id": "Q-003", "query": "Who is authoritative for a worker's employment status?", "relevant_fact_ids": ["PLAN-SOURCE-1"], "category": "paraphrase"},
+    {"query_id": "Q-004", "query": "How does the system identify each member of the workforce?", "relevant_fact_ids": ["REQ-ID-1"], "category": "semantic"},
+    {"query_id": "Q-005", "query": "May an old employee number be assigned to somebody else?", "relevant_fact_ids": ["REQ-ID-2", "REQ-MEETING-1"], "category": "negation-paraphrase"},
+    {"query_id": "Q-006", "query": "What happens after directory provisioning fails three times?", "relevant_fact_ids": ["REQ-RETRY-1"], "category": "cross-sentence"},
+    {"query_id": "Q-007", "query": "Which people must authorize privileged permissions?", "relevant_fact_ids": ["REQ-APPROVAL-1", "PLAN-STAKE-1", "REQ-TABLE-2", "REQ-MEETING-3"], "category": "semantic"},
+    {"query_id": "Q-008", "query": "What is the emergency access approval deadline?", "relevant_fact_ids": ["REQ-TABLE-1"], "category": "table"},
+    {"query_id": "Q-009", "query": "How do we prevent duplicate directory accounts after a timeout?", "relevant_fact_ids": ["REQ-INTEGRATION-1"], "category": "hard-negative"},
+    {"query_id": "Q-010", "query": "Which fields are captured for every provisioning attempt?", "relevant_fact_ids": ["REQ-AUDIT-1"], "category": "semantic"},
+    {"query_id": "Q-011", "query": "What did Priya say about reusing identifiers?", "relevant_fact_ids": ["REQ-MEETING-1"], "category": "speaker"},
+    {"query_id": "Q-012", "query": "Are cryptocurrency payments in version one?", "relevant_fact_ids": ["ADV-REAL-1"], "category": "adversarial-source"},
+    {"query_id": "Q-013", "query": "What is REQ-ACC-003?", "relevant_fact_ids": ["REQ-RETRY-1"], "category": "exact-identifier"}
+  ]
+}
